@@ -27,9 +27,9 @@ st.title("Tulane University: Sentiment Analysis from News")
 
 
 
-# Make it so someone can type in their own keywords to customize the search
+# Create text input for user to enter search terms
 search = st.text_input("Enter a keyword to search for. Separate multiple values with commas", "Tulane")
-# Separate the search terms with a plus sign
+
 start_date = st.date_input("Start Date", value= datetime.date.today() - datetime.timedelta(days = 7))
 end_date = st.date_input("End Date", value=datetime.date.today())
 
@@ -37,12 +37,10 @@ end_date = st.date_input("End Date", value=datetime.date.today())
 
 
 if st.button('Search'):
+    # Separate the search terms with a plus sign
     search = search.replace(", ", "+")
 
 
-
-
-    #create a sidebar filter for the date range
    
     # Fetch News API articles
     news_url = (
@@ -84,7 +82,7 @@ if st.button('Search'):
             "sentiment score, summary, and a statement explaining how the article relates to the keywords.\n"
             "Separate article info by double newlines and always include 'Title:' before the headline and 'Sentiment:' before the score.\n"
             "Only judge the sentiment for each article in terms of how it mentions the keywords. Max amount of titles should be 100.\n\n"
-            "If the article merely mentions a quote from a Tulane student, faculty, or staff, mention that on the.\n"
+            "If the article merely mentions a quote from a Tulane student, faculty, or staff, mention in the summary.\n"
             f"{text_to_analyze}"
             )
 
@@ -183,14 +181,21 @@ if st.button('Search'):
 
 
 
-                #make a metric showing the average sentiment score. round it. Also add a metric for amount of news stories covered
-            st.metric("Average Sentiment Score", round(df['Sentiment'].mean(), 2))
+                # Create columns for metrics
+            col1, col2 = st.columns(2)
+                
+             # Display average sentiment score in the first column
+            with col1:
+                st.metric("Average Sentiment Score", round(df['Sentiment'].mean(), 2))
+                
+                # Display number of news stories in the second column
+            with col2:
+                st.metric("Number of News Stories", len(df))
+                
+            # Display overall sentiment message
             if df['Sentiment'].mean() >= 0.1:
                 st.write("Overall sentiment is positive.")
-                st.metric("Number of News Stories", len(df))
             elif df['Sentiment'].mean() <= -0.1:
                 st.write("Overall sentiment is negative.")
-                st.metric("Number of News Stories", len(df))
             else:
                 st.write("Overall sentiment is neutral.")
-                st.metric("Number of News Stories", len(df))
