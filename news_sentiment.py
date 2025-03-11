@@ -22,7 +22,7 @@ GEMINI_API_KEY = "AIzaSyCfor02YqYrYMsL016A9-PHXm6Whof3iGM"
 # Configure Gemini API
 client = genai.Client(api_key=GEMINI_API_KEY)
 # Streamlit UI
-st.title("Tulane University: Sentiment Analysis from News")
+st.title("Sentiment Analysis from News")
 
 
 
